@@ -105,6 +105,99 @@
 			"response": []
 		},
 		{
+			"name": "addExhibitions",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"TestExhibition1\",\n    \"description\": \"test description 1\",\n    \"dateFrom\": \"2023-04-16T18:25:43.511Z\",\n    \"dateTo\": \"2024-04-16T18:25:43.511Z\",\n    \"address\": \" test address 1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/exhibition",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"exhibition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addTargetFile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {}
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/targetfile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"targetfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "getUsers",
 			"event": [
 				{
