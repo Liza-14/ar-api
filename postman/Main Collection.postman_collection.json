@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "1d9cfbf7-febe-4596-a831-315c10216762",
+		"_postman_id": "3e0b8311-7a72-48fd-9ad9-609c79b33457",
 		"name": "Main Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "16907402"
+		"_exporter_id": "10335856"
 	},
 	"item": [
 		{
@@ -148,6 +148,107 @@
 					"path": [
 						"api",
 						"exhibition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTargetFile",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"TestExhibition1\",\n    \"description\": \"test description 1\",\n    \"dateFrom\": \"2023-04-16T18:25:43.511Z\",\n    \"dateTo\": \"2024-04-16T18:25:43.511Z\",\n    \"address\": \" test address 1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/exhibition",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"exhibition"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllExhibitions",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"TestExhibition1\",\n    \"description\": \"test description 1\",\n    \"dateFrom\": \"2023-04-16T18:25:43.511Z\",\n    \"dateTo\": \"2024-04-16T18:25:43.511Z\",\n    \"address\": \" test address 1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9000/api/exhibitions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"api",
+						"exhibitions"
 					]
 				}
 			},

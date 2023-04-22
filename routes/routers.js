@@ -1,7 +1,6 @@
 import express from 'express';
 import auth from '../middlewares/auth.js';
 import UserController from '../controllers/userController.js';
-import GalleryRepository from '../repositories/galleryRepository.js';
 import GalleryController from '../controllers/galleryController.js';
 
 const router = express.Router();
@@ -23,5 +22,7 @@ router.delete('/api/user/:id', auth.verify, UserController.deleteUser);
 
 router.post('/api/exhibition', auth.verify, GalleryController.addExhibition);
 router.post('/api/targetfile/:exhibitionId', auth.verify, GalleryController.attachTargetFile);
+router.get('/api/exhibitions', GalleryController.getAllExhibitions)
+router.get('/api/targetfile/:exhibitionId', GalleryController.getTargetFile)
 
 export default router
