@@ -25,9 +25,10 @@ export default class GalleryRepository {
     return exhibition
   }
 
-  static async addTargetFile(exhibitionId, binnaryString) {
-    console.log(Buffer.from(binnaryString));
-    await pool.query("UPDATE exhibitions SET targetFile = $1 WHERE id = $2", [ Buffer.from(binnaryString),  exhibitionId]);
+  static async getExhibitionById(id) {
+    const exhibition = (await pool.query('SELECT id, name, description, address, dateFrom, dateTo, authorId FROM exhibitions WHERE id = $1', [id])).rows[0];
+    console.log(exhibition)
+    return exhibition
   }
 
   static async getTargetFile(exhibitionId) {
@@ -35,5 +36,37 @@ export default class GalleryRepository {
     return (await pool.query("SELECT targetfile FROM exhibitions WHERE id = $1", [exhibitionId]))
       .rows[0]
       .targetfile;
+  }
+
+  static async getPictures(exhibitionId) {
+    return (await pool.query("SELECT * FROM pictures WHERE exhibitionid = $1", [exhibitionId]))
+      .rows
+  }
+
+  static async addPicture({name, description, image, height, authorid, exhibitionid}) {
+    return (await pool.query(
+        `INSERT INTO public.pictures(name, description, image, authorid, exhibitionid, height)
+        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`, 
+        [name, description, image, authorid, exhibitionid, height]))
+      .rows[0]
+  }
+
+  static async deletePicture(id) {
+    return (await pool.query(
+        `DELETE FROM public.pictures
+          WHERE id = $1
+          RETURNING *;`, 
+        [id]))
+      .rows[0]
+  }
+
+  static async addArVideo(pictureId, videoPath) {
+    return (await pool.query(
+        `UPDATE public.pictures
+          SET video = $2
+          WHERE id = $1
+          RETURNING *;`, 
+        [pictureId, videoPath]))
+      .rows[0]
   }
 }

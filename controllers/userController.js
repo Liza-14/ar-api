@@ -70,4 +70,8 @@ export default class UserController {
         console.log(err)
       })
   }
+
+  static getUser(req, res) {
+    res.json(req.user)
+  }
 }
