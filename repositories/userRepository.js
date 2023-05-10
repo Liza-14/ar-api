@@ -6,8 +6,8 @@ export default class UserRepository {
       .rows;
   }
 
-  static async regUser({ username, email, password }) {
-    const user = (await pool.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *;", [username, email, password]))
+  static async regUser({ username, email, password, role }) {
+    const user = (await pool.query("INSERT INTO users (username, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *;", [username, email, password, role]))
       .rows[0];
     user.password = undefined;
     return user;

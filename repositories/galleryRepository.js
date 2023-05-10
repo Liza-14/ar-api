@@ -60,13 +60,14 @@ export default class GalleryRepository {
       .rows[0]
   }
 
-  static async addArVideo(pictureId, videoPath) {
+  static async addArVideo(pictureId, videoPath, height) {
     return (await pool.query(
         `UPDATE public.pictures
-          SET video = $2
+          SET video = $2,
+          height = $3
           WHERE id = $1
           RETURNING *;`, 
-        [pictureId, videoPath]))
+        [pictureId, videoPath, height]))
       .rows[0]
   }
 }

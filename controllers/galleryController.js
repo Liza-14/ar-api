@@ -5,6 +5,10 @@ import { OfflineCompiler } from 'mind-ar/src/image-target/offline-compiler.js';
 
 import { writeFile } from 'fs/promises'
 import { loadImage } from 'canvas';
+import probe from 'node-ffprobe';
+import ffprobeInstaller from '@ffprobe-installer/ffprobe'
+
+probe.FFPROBE_PATH = ffprobeInstaller.path
 
 const imagePaths = ['examples/image-tracking/assets/card-example/card.png'];
 
@@ -81,10 +85,11 @@ export default class GalleryController {
 
   static addArVideo(req, res) {
     console.log(req.body)
-    GalleryRepository.addArVideo(req.body.pictureId, req.file.path)
+    probe(req.file.path)
+      .then(data => GalleryRepository.addArVideo(req.body.pictureId, req.file.path, data.streams[0].height/data.streams[0].width))
       .then(result => {
-        res.json(result)
-      })
+          res.json(result)
+        })
       .catch(error => {
         console.error(error)
         res.sendStatus(500);
