@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index",
     "nodemon": "nodemon --exec node index.js",
-    "nodemon-prod": "nodemon --exec node index.js env=prod",
+    "prod": "node index.js env=prod",
     "test": "echo \"Error: no test specified\""
   },
   "author": "",
