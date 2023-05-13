@@ -103,7 +103,7 @@ export default class GalleryController {
         console.log(req.params.exhibitionId);
         console.log(images);
         const compiler = new OfflineCompiler();
-        await compiler.compileImageTargets(images, console.log);
+        await compiler.compileImageTargets(images, res.write);
 
         const buffer = compiler.exportData();
         await writeFile(`uploads/targets_${req.params.exhibitionId}.mind`, buffer);
