@@ -1,7 +1,7 @@
 {
     "DB_HOST": "ar-gallery.postgres.database.azure.com",
     "DB_USER": "lizabvb57@ar-gallery",
-    "DB_PASS":"root",
-    "DB_NAME":"ARGallery",
-    "DB_PORT":"5432"
+    "DB_PASS": "lizabvb@123456",
+    "DB_NAME": "ARGallery",
+    "DB_PORT": "5432"
 }
