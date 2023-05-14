@@ -100,8 +100,6 @@ export default class GalleryController {
     GalleryRepository.getPictures(req.params.exhibitionId)
       .then(async result => {
         const images = await Promise.all(result.map(picture => loadImage(picture.image)));
-        console.log(req.params.exhibitionId);
-        console.log(images);
         const compiler = new OfflineCompiler();
         await compiler.compileImageTargets(images, (m) => {
           res.write(Math.round(m) + '')

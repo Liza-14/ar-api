@@ -21,13 +21,11 @@ export default class GalleryRepository {
 
   static async getAllExhibitions() {
     const exhibition = (await pool.query('SELECT id, name, description, address, dateFrom, dateTo, authorId FROM exhibitions')).rows;
-    console.log(exhibition)
     return exhibition
   }
 
   static async getExhibitionById(id) {
     const exhibition = (await pool.query('SELECT id, name, description, address, dateFrom, dateTo, authorId FROM exhibitions WHERE id = $1', [id])).rows[0];
-    console.log(exhibition)
     return exhibition
   }
 
