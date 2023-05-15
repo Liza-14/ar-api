@@ -108,7 +108,6 @@ export default class GalleryController {
           .then(async () => {
             const buffer = compiler.exportData();
             await writeFile(`uploads/targets_${req.params.exhibitionId}.mind`, buffer);
-            res.sendStatus(200);
           })
           .catch((e) => {
             console.error(e)
