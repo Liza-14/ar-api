@@ -101,13 +101,18 @@ export default class GalleryController {
       .then(async result => {
         const images = await Promise.all(result.map(picture => loadImage(picture.image)));
         const compiler = new OfflineCompiler();
-        await compiler.compileImageTargets(images, (m) => {
+        compiler.compileImageTargets(images, (m) => {
           res.write(Math.round(m) + '')
-        });
-
-        const buffer = compiler.exportData();
-        await writeFile(`uploads/targets_${req.params.exhibitionId}.mind`, buffer);
-        res.sendStatus(200);
+        })
+          .then(async () => {
+            const buffer = compiler.exportData();
+            await writeFile(`uploads/targets_${req.params.exhibitionId}.mind`, buffer);
+            res.sendStatus(200);
+          })
+          .catch((e) => {
+            console.error(e)
+          res.sendStatus(500);
+          })
       })
       .catch(error => {
         console.error(error)

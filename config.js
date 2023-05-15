@@ -16,5 +16,5 @@ const configFilePath = getConfigFileForEnvironment(env);
 const rawData = fs.readFileSync(configFilePath);
 const config = JSON.parse(rawData);
 
-console.log(config)
+console.log('config:', configFilePath)
 export default config;

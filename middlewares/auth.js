@@ -9,7 +9,10 @@ exports.verify = (req, res, next) => {
   if (!token) res.sendStatus(401)
   else {
     jwt.verify(token.split(" ")[1], tokenSecret, (error, value) => {
-      if (error) res.sendStatus(401);
+      if (error) {
+        res.sendStatus(401);
+        return;
+      }
       UserRepository.getUserById(value.data)
         .then(user => {
           req.user = user;
