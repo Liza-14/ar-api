@@ -59,8 +59,11 @@ export default class GalleryController {
   }
 
   static addPicture(req, res) {
-    
-    GalleryRepository.addPicture({ ...req.body, image: req.file.path, height: 1 })
+    loadImage(req.file.path)
+      .then(img => {
+        const heightRate = img.height/img.width;
+        return GalleryRepository.addPicture({ ...req.body, image: req.file.path, height: heightRate })
+      })
       .then(result => {
         res.json(result)
       })
@@ -84,9 +87,7 @@ export default class GalleryController {
   }
 
   static addArVideo(req, res) {
-    console.log(req.body)
-    probe(req.file.path)
-      .then(data => GalleryRepository.addArVideo(req.body.pictureId, req.file.path, data.streams[0].height/data.streams[0].width))
+    GalleryRepository.addArVideo(req.body.pictureId, req.file.path)
       .then(result => {
           res.json(result)
         })
