@@ -49,9 +49,16 @@ router.post('/api/exhibition', auth.verify, GalleryController.addExhibition);
 router.get('/api/exhibitions', GalleryController.getAllExhibitions)
 router.get('/api/exhibition/:id', GalleryController.getExhibitionById)
 router.get('/api/pictures/:exhibitionId', GalleryController.getPictures)
-router.post('/api/picture', upload.single('imagefile'), GalleryController.addPicture)
-router.delete('/api/picture/:id', GalleryController.deletePicture)
-router.post('/api/video', upload.single('videofile'), GalleryController.addArVideo)
-router.post('/api/generate/:exhibitionId', GalleryController.generateTargets)
+router.post('/api/picture', auth.verify, upload.single('imagefile'), GalleryController.addPicture)
+router.get('/api/picture/:id', GalleryController.getPictureById)
+router.delete('/api/picture/:id', auth.verify, GalleryController.deletePicture)
+router.post('/api/video', auth.verify, upload.single('videofile'), GalleryController.addArVideo)
+router.delete('/api/video/:id', auth.verify, GalleryController.deleteVideo)
+router.post('/api/generate/:exhibitionId', auth.verify, GalleryController.generateTargets)
+router.delete('/api/exhibition/:id', auth.verify, GalleryController.deleteExhibition)
+router.post('/api/survey', auth.verify, GalleryController.createSurvey)
+router.get('/api/surveys/:exhibitionId', GalleryController.getSurveysForExhibition)
+
+
 
 export default router

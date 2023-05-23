@@ -41,6 +41,16 @@ export default class GalleryRepository {
       .rows
   }
 
+  static async getPictureById(id) {
+    return (await pool.query("SELECT * FROM pictures WHERE id = $1", [id]))
+      .rows[0];
+  }
+
+  static async getVideos(pictureId) {
+    return (await pool.query("SELECT * FROM videos WHERE pictureid = $1", [pictureId]))
+      .rows
+  }
+
   static async addPicture({name, description, image, height, authorid, exhibitionid}) {
     return (await pool.query(
         `INSERT INTO public.pictures(name, description, image, authorid, exhibitionid, height)
@@ -58,13 +68,43 @@ export default class GalleryRepository {
       .rows[0]
   }
 
-  static async addArVideo(pictureId, videoPath) {
+  static async deleteVideo(id) {
     return (await pool.query(
-        `UPDATE public.pictures
-          SET video = $2
+        `DELETE FROM public.videos
           WHERE id = $1
           RETURNING *;`, 
+        [id]))
+      .rows[0]
+  }
+
+  static async deleteExhibition(id) {
+    return (await pool.query(
+        `DELETE FROM public.exhibitions
+          WHERE id = $1
+          RETURNING *;`, 
+        [id]))
+      .rows[0]
+  }
+
+  static async addArVideo(pictureId, videoPath) {
+    return (await pool.query(
+        `INSERT INTO public.videos(pictureid, path)
+          VALUES ($1, $2) RETURNING *;`, 
         [pictureId, videoPath]))
       .rows[0]
+  }
+
+  static async createSurvey(data) {
+    return (await pool.query(
+      `INSERT INTO public.surveys(pictureid, exhibitionid, data)
+        VALUES ($1, $2, $3) RETURNING *;`, 
+      [data.pictureId, data.exhibitionId, data]))
+    .rows[0]
+  }
+
+  static async getSurveysForExhibition(exhibitionId) {
+    return (await pool.query("SELECT * FROM surveys WHERE exhibitionid = $1", [exhibitionId]))
+    .rows
+    .map(x => JSON.parse(x.data))
   }
 }

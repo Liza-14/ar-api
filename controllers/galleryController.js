@@ -7,6 +7,7 @@ import { writeFile } from 'fs/promises'
 import { loadImage } from 'canvas';
 import probe from 'node-ffprobe';
 import ffprobeInstaller from '@ffprobe-installer/ffprobe'
+import { error } from "console";
 
 probe.FFPROBE_PATH = ffprobeInstaller.path
 
@@ -49,8 +50,27 @@ export default class GalleryController {
 
   static getPictures(req, res) {
     GalleryRepository.getPictures(req.params.exhibitionId)
-      .then(result => {
-        res.json(result)
+      .then(async pictures => {
+        let videos = await Promise.all( pictures.map(x => GalleryRepository.getVideos(x.id)))
+        videos.filter(x => x.length)
+          .forEach(v => {
+            const pic = pictures.find(x => x.id == v[0].pictureid);
+            pic.videos = v;
+          });
+        res.json(pictures)
+      })
+      .catch(error => {
+        console.error(error)
+        res.sendStatus(500);
+      })
+  }
+
+  static getPictureById(req, res) {
+    GalleryRepository.getPictureById(req.params.id)
+      .then(async picture => {
+        let videos = await GalleryRepository.getVideos(picture.id)
+        picture.videos = videos;
+        res.json(picture)
       })
       .catch(error => {
         console.error(error)
@@ -73,17 +93,57 @@ export default class GalleryController {
       })
   }
 
-  static deletePicture(req, res) {
-    GalleryRepository.deletePicture(req.params.id)
+  static async deletePicture(req, res) {
+    try {
+      const videos = await GalleryRepository.getVideos(req.params.id);
+
+      await Promise.all(videos.map(v => 
+        GalleryRepository.deleteVideo(v.id)
+          .then(() => fs.unlinkSync(v.path))
+      ))
+
+      const pic = await GalleryRepository.deletePicture(req.params.id);
+      fs.unlinkSync(pic.image);
+      res.json(pic)
+    }
+    catch(error) {
+      console.error(error)
+      res.sendStatus(500);
+    }
+  }
+
+  static deleteVideo(req, res) {
+    GalleryRepository.deleteVideo(req.params.id)
       .then(result => {
-        fs.unlinkSync(result.image);
-        result.video && fs.unlinkSync(result.video);
+        fs.unlinkSync(result.path);
         res.json(result)
       })
       .catch(error => {
         console.error(error)
         res.sendStatus(500);
       })
+  }
+
+  static async deleteExhibition(req, res) {
+    try {
+      const pics = await GalleryRepository.getPictures(req.params.id);
+      await Promise.all(pics.map(async pic => {
+        const videos = await GalleryRepository.getVideos(pic.id);
+        videos && await Promise.all(videos.map(v => GalleryRepository.deleteVideo(v.id)
+          .then((video) => fs.unlinkSync(video.path))))
+
+        await GalleryRepository.deletePicture(pic.id);
+        fs.unlinkSync(pic.image);
+      }))
+
+      await GalleryRepository.deleteExhibition(req.params.id);
+      fs.existsSync(`uploads/targets_${req.params.id}`) && fs.unlinkSync(`uploads/targets_${req.params.id}`)
+      res.json();
+    }
+    catch(error) {
+      console.error(error)
+      res.sendStatus(500);
+    }
   }
 
   static addArVideo(req, res) {
@@ -113,6 +173,28 @@ export default class GalleryController {
             console.error(e)
           res.sendStatus(500);
           })
+      })
+      .catch(error => {
+        console.error(error)
+        res.sendStatus(500);
+      })
+  }
+
+  static createSurvey(req, res) {
+    GalleryRepository.createSurvey(req.body)
+      .then(result => {
+        res.json(result)
+      })
+      .catch(error => {
+        console.error(error)
+        res.sendStatus(500);
+      })
+  }
+
+  static getSurveysForExhibition(req, res) {
+    GalleryRepository.getSurveysForExhibition(req.params.exhibitionId)
+      .then(result => {
+        res.json(result)
       })
       .catch(error => {
         console.error(error)
